@@ -1,4 +1,4 @@
-package com.code2bits.camunda.simplebpm;
+package com.javanibble.camunda.examples;
 
 
 import org.camunda.bpm.engine.RuntimeService;
