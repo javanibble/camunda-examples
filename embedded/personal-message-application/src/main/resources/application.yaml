@@ -1,9 +1,0 @@
-camunda.bpm:
-  admin-user:
-    id: starlord
-    password: knowhere
-    firstName: Peter
-    lastName: Quill
-    email: starlord@guardians.galaxy
-  filter:
-    create: All tasks
