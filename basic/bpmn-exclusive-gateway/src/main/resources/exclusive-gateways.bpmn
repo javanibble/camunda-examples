@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.1.1">
+  <bpmn:process id="approve-application" name="Approve Application" isExecutable="true" camunda:versionTag="1.0.0">
+    <bpmn:startEvent id="start_event_approve_application" name="Approve Application">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="simNextFire" value="${g.timesPerDay(&#34;processStarted&#34;,&#34;02:00&#34;,&#34;22:00&#34;, 77)}" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>SequenceFlow1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="end_event_retrieve_message" name="Application Is Not Approved">
+      <bpmn:incoming>Flow_0tr10gv</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow1" sourceRef="start_event_approve_application" targetRef="service_task_approve_application" />
+    <bpmn:sequenceFlow id="SequenceFlow_1xo5oma" sourceRef="service_task_approve_application" targetRef="Gateway_0gq7jvy" />
+    <bpmn:serviceTask id="service_task_approve_application" name="Approve Application" camunda:delegateExpression="#{approveApplication}">
+      <bpmn:incoming>SequenceFlow1</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1xo5oma</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_0gq7jvy" name="Is Application Approved?">
+      <bpmn:incoming>SequenceFlow_1xo5oma</bpmn:incoming>
+      <bpmn:outgoing>sequence_flow_application_not_approved</bpmn:outgoing>
+      <bpmn:outgoing>sequence_flow_application_approved</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="sequence_flow_application_not_approved" name="No" sourceRef="Gateway_0gq7jvy" targetRef="service_task_log_declined_application">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{not isApplicationApproved}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0tr10gv" sourceRef="service_task_log_declined_application" targetRef="end_event_retrieve_message" />
+    <bpmn:sequenceFlow id="sequence_flow_application_approved" name="Yes" sourceRef="Gateway_0gq7jvy" targetRef="service_task_log_approved_application">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{isApplicationApproved}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="Event_0894fv5" name="Application Is Approved">
+      <bpmn:incoming>Flow_1m15xsc</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1m15xsc" sourceRef="service_task_log_approved_application" targetRef="Event_0894fv5" />
+    <bpmn:serviceTask id="service_task_log_declined_application" name="Log Declined Application" camunda:delegateExpression="#{logger}">
+      <bpmn:incoming>sequence_flow_application_not_approved</bpmn:incoming>
+      <bpmn:outgoing>Flow_0tr10gv</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="service_task_log_approved_application" name="Log Approved Application" camunda:delegateExpression="#{logger}">
+      <bpmn:incoming>sequence_flow_application_approved</bpmn:incoming>
+      <bpmn:outgoing>Flow_1m15xsc</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="approve-application">
+      <bpmndi:BPMNEdge id="Flow_1m15xsc_di" bpmnElement="Flow_1m15xsc">
+        <di:waypoint x="740" y="300" />
+        <di:waypoint x="922" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0rmmci4_di" bpmnElement="sequence_flow_application_approved">
+        <di:waypoint x="500" y="145" />
+        <di:waypoint x="500" y="300" />
+        <di:waypoint x="640" y="300" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="506" y="220" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tr10gv_di" bpmnElement="Flow_0tr10gv">
+        <di:waypoint x="740" y="120" />
+        <di:waypoint x="922" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0xaulcf_di" bpmnElement="sequence_flow_application_not_approved">
+        <di:waypoint x="525" y="120" />
+        <di:waypoint x="640" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="575" y="102" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1xo5oma_di" bpmnElement="SequenceFlow_1xo5oma">
+        <di:waypoint x="400" y="120" />
+        <di:waypoint x="475" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_08va5r8_di" bpmnElement="SequenceFlow1">
+        <di:waypoint x="198" y="120" />
+        <di:waypoint x="300" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="228" y="95" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="start_event_approve_application">
+        <dc:Bounds x="162" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="155" y="138" width="54" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_0fkea3f_di" bpmnElement="end_event_retrieve_message">
+        <dc:Bounds x="922" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="906" y="146" width="68" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_1tetcbq_di" bpmnElement="service_task_approve_application">
+        <dc:Bounds x="300" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0gq7jvy_di" bpmnElement="Gateway_0gq7jvy" isMarkerVisible="true">
+        <dc:Bounds x="475" y="95" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="467" y="66" width="66" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0894fv5_di" bpmnElement="Event_0894fv5">
+        <dc:Bounds x="922" y="282" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="907" y="325" width="66" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1kgthjh_di" bpmnElement="service_task_log_declined_application">
+        <dc:Bounds x="640" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1gkw5c1_di" bpmnElement="service_task_log_approved_application">
+        <dc:Bounds x="640" y="260" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
