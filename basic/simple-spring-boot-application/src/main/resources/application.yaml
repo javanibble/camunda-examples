@@ -1,7 +1,5 @@
-camunda.bpm.admin-user.id=starlord
-camunda.bpm.admin-user.password=knowhere
+spring.datasource.url: jdbc:h2:file:./camunda-h2-database
 
-spring.h2.console.enabled=true
-spring.h2.console.path=/h2-console
-
-logging.level.org.camunda.bpm.engine.persistence=debug
+camunda.bpm.admin-user:
+  id: demo
+  password: demo
