@@ -1,5 +1,6 @@
 # IDEs and editors
 *.iml
+*.db
 .idea
 overlays
 widgetsettings
