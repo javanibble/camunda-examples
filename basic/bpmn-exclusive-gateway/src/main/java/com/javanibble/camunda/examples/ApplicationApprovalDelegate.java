@@ -23,7 +23,7 @@ public class ApplicationApprovalDelegate implements JavaDelegate {
 
         LOGGER.info("Approval Process Started for : " + execution.getVariable("applicant"));
 
-        execution.setVariable("isApplicationApproved", randomApproval.nextBoolean());
+        execution.setVariable("isApplicationApproved", false);//randomApproval.nextBoolean());
 
     }
 
