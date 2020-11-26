@@ -3,11 +3,9 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:mysql://localhost:3306/camunda
+    url: jdbc:mysql://localhost:3306/simple-flow
     username: root
-    password: password
-
-
+    password: root
 camunda:
   bpm:
     admin-user:
@@ -17,6 +15,5 @@ camunda:
       create: All Tasks
     database:
       type: mysql
-
 server:
-  port: 8081
+  port: 9091

@@ -10,15 +10,15 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Application implements CommandLineRunner {
+public class MigrationApplication implements CommandLineRunner {
 
-  private static Logger LOG = LoggerFactory.getLogger(Application.class);
+  private static Logger LOG = LoggerFactory.getLogger(MigrationApplication.class);
 
   @Autowired
   private UpgradeMainFromV1ToV2 processMigration;
 
   public static void main(String[] args) {
-    SpringApplication.run(Application.class);
+    SpringApplication.run(MigrationApplication.class);
   }
 
   @Override

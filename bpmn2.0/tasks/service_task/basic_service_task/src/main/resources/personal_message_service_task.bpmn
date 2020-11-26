@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0r4k3ry" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.5.0">
+  <bpmn:process id="personal-message" name="Personal Message" isExecutable="true" camunda:versionTag="1.0.0">
+    <bpmn:startEvent id="start_event_retrieve_message" name="Retrieve Personal Message">
+      <bpmn:outgoing>SequenceFlow_1ir7neu</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="service_task_console_logger1" name="Log Message to Console" camunda:class="com.javanibble.camunda.examples.delegate.PersonalMessageLoggerType1">
+      <bpmn:incoming>SequenceFlow_1ir7neu</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0enyzgo</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="service_task_console_logger2" name="Log Message to Console" camunda:delegateExpression="${personalMessageLoggerType2}">
+      <bpmn:incoming>SequenceFlow_0enyzgo</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_16486hh</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="service_task_console_logger3" name="Log Message to Console">
+      <bpmn:incoming>SequenceFlow_16486hh</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0uyy47r</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="service_task_console_logger4" name="Log Message to Console">
+      <bpmn:incoming>SequenceFlow_0uyy47r</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_06vsh95</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="end_event_retrieve_message" name="Personal Message Retrieved">
+      <bpmn:incoming>SequenceFlow_06vsh95</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1ir7neu" sourceRef="start_event_retrieve_message" targetRef="service_task_console_logger1" />
+    <bpmn:sequenceFlow id="SequenceFlow_0enyzgo" sourceRef="service_task_console_logger1" targetRef="service_task_console_logger2" />
+    <bpmn:sequenceFlow id="SequenceFlow_16486hh" sourceRef="service_task_console_logger2" targetRef="service_task_console_logger3" />
+    <bpmn:sequenceFlow id="SequenceFlow_0uyy47r" sourceRef="service_task_console_logger3" targetRef="service_task_console_logger4" />
+    <bpmn:sequenceFlow id="SequenceFlow_06vsh95" sourceRef="service_task_console_logger4" targetRef="end_event_retrieve_message" />
+    <bpmn:textAnnotation id="TextAnnotation_1xaynvl">
+      <bpmn:text>A Service Task specifying a class that implements a JavaDelegate or ActivityBehavior</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_0szl1sa" sourceRef="service_task_console_logger1" targetRef="TextAnnotation_1xaynvl" />
+    <bpmn:textAnnotation id="TextAnnotation_1xtrzrj">
+      <bpmn:text>A Service Task evaluating an expression that resolves to a delegation object</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_1h49oby" sourceRef="service_task_console_logger2" targetRef="TextAnnotation_1xtrzrj" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="personal-message">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="start_event_retrieve_message">
+        <dc:Bounds x="179" y="239" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="175" y="282" width="45" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_0aho801_di" bpmnElement="service_task_console_logger1">
+        <dc:Bounds x="310" y="217" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_0n70gh4_di" bpmnElement="service_task_console_logger2">
+        <dc:Bounds x="500" y="217" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_1ob19ve_di" bpmnElement="service_task_console_logger3">
+        <dc:Bounds x="680" y="217" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_0lj5qsd_di" bpmnElement="service_task_console_logger4">
+        <dc:Bounds x="880" y="217" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_13s3obx_di" bpmnElement="end_event_retrieve_message">
+        <dc:Bounds x="1072" y="239" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1066" y="282" width="48" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1ir7neu_di" bpmnElement="SequenceFlow_1ir7neu">
+        <di:waypoint x="215" y="257" />
+        <di:waypoint x="310" y="257" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0enyzgo_di" bpmnElement="SequenceFlow_0enyzgo">
+        <di:waypoint x="410" y="257" />
+        <di:waypoint x="500" y="257" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_16486hh_di" bpmnElement="SequenceFlow_16486hh">
+        <di:waypoint x="600" y="257" />
+        <di:waypoint x="680" y="257" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0uyy47r_di" bpmnElement="SequenceFlow_0uyy47r">
+        <di:waypoint x="780" y="257" />
+        <di:waypoint x="880" y="257" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_06vsh95_di" bpmnElement="SequenceFlow_06vsh95">
+        <di:waypoint x="980" y="257" />
+        <di:waypoint x="1072" y="257" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_1xaynvl_di" bpmnElement="TextAnnotation_1xaynvl">
+        <dc:Bounds x="295" y="90" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_0szl1sa_di" bpmnElement="Association_0szl1sa">
+        <di:waypoint x="360" y="217" />
+        <di:waypoint x="360" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_1xtrzrj_di" bpmnElement="TextAnnotation_1xtrzrj">
+        <dc:Bounds x="500" y="82" width="100" height="96" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_1h49oby_di" bpmnElement="Association_1h49oby">
+        <di:waypoint x="550" y="217" />
+        <di:waypoint x="550" y="178" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
