@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.5.0" camunda:diagramRelationId="d1451d16-cbf4-4a65-b57e-930251e9548c">
+  <bpmn:process id="order-coffee" name="Order Coffee" isExecutable="true" camunda:versionTag="1.0.0">
+    <bpmn:sequenceFlow id="Flow_1jli4u6" sourceRef="retrieve-coffee-order" targetRef="Gateway_0630ahh" />
+    <bpmn:sequenceFlow id="Flow_04azx83" sourceRef="Gateway_0630ahh" targetRef="make-coffee" />
+    <bpmn:sequenceFlow id="Flow_0dnwzj2" sourceRef="Gateway_0630ahh" targetRef="retrieve-cup-saucer" />
+    <bpmn:sequenceFlow id="Flow_1jqpobm" sourceRef="make-coffee" targetRef="Gateway_1ulvlkx" />
+    <bpmn:sequenceFlow id="Flow_0w7m6sb" sourceRef="retrieve-cup-saucer" targetRef="Gateway_1ulvlkx" />
+    <bpmn:sequenceFlow id="Flow_105q91p" sourceRef="Gateway_1ulvlkx" targetRef="pour-coffee-in-cup" />
+    <bpmn:startEvent id="Event_1a6pj9d" name="Order Coffee">
+      <bpmn:outgoing>Flow_00iop9r</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_00iop9r" sourceRef="Event_1a6pj9d" targetRef="retrieve-coffee-order" />
+    <bpmn:endEvent id="Event_0vvkd3t" name="Coffee Ordered">
+      <bpmn:incoming>Flow_0byan59</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0byan59" sourceRef="deliver-coffee-order" targetRef="Event_0vvkd3t" />
+    <bpmn:parallelGateway id="Gateway_0630ahh">
+      <bpmn:incoming>Flow_1jli4u6</bpmn:incoming>
+      <bpmn:outgoing>Flow_04azx83</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0dnwzj2</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:parallelGateway id="Gateway_1ulvlkx">
+      <bpmn:incoming>Flow_1jqpobm</bpmn:incoming>
+      <bpmn:incoming>Flow_0w7m6sb</bpmn:incoming>
+      <bpmn:outgoing>Flow_105q91p</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:sequenceFlow id="Flow_1endfqu" sourceRef="pour-coffee-in-cup" targetRef="deliver-coffee-order" />
+    <bpmn:serviceTask id="retrieve-coffee-order" name="Retrieve Coffee Order" camunda:delegateExpression="${logger}">
+      <bpmn:incoming>Flow_00iop9r</bpmn:incoming>
+      <bpmn:outgoing>Flow_1jli4u6</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="make-coffee" name="Make&#10;Coffee" camunda:delegateExpression="${logger}">
+      <bpmn:incoming>Flow_04azx83</bpmn:incoming>
+      <bpmn:outgoing>Flow_1jqpobm</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="retrieve-cup-saucer" name="Retrieve&#10;Cup &#38; Saucer" camunda:delegateExpression="${logger}">
+      <bpmn:incoming>Flow_0dnwzj2</bpmn:incoming>
+      <bpmn:outgoing>Flow_0w7m6sb</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="pour-coffee-in-cup" name="Pour Coffee&#10;in Cup" camunda:delegateExpression="${logger}">
+      <bpmn:incoming>Flow_105q91p</bpmn:incoming>
+      <bpmn:outgoing>Flow_1endfqu</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="deliver-coffee-order" name="Deliver Coffee Order" camunda:delegateExpression="${logger}">
+      <bpmn:incoming>Flow_1endfqu</bpmn:incoming>
+      <bpmn:outgoing>Flow_0byan59</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:textAnnotation id="TextAnnotation_0lbuhri">
+      <bpmn:text>Parallel Gateway (Fork)</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_1167fph" sourceRef="Gateway_0630ahh" targetRef="TextAnnotation_0lbuhri" />
+    <bpmn:textAnnotation id="TextAnnotation_0eazwei">
+      <bpmn:text>Parallel Gateway (Join)</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_1afs0h6" sourceRef="Gateway_1ulvlkx" targetRef="TextAnnotation_0eazwei" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="order-coffee">
+      <bpmndi:BPMNEdge id="Flow_1endfqu_di" bpmnElement="Flow_1endfqu">
+        <di:waypoint x="890" y="170" />
+        <di:waypoint x="940" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0byan59_di" bpmnElement="Flow_0byan59">
+        <di:waypoint x="1040" y="170" />
+        <di:waypoint x="1072" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00iop9r_di" bpmnElement="Flow_00iop9r">
+        <di:waypoint x="208" y="170" />
+        <di:waypoint x="250" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_105q91p_di" bpmnElement="Flow_105q91p">
+        <di:waypoint x="745" y="170" />
+        <di:waypoint x="790" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0w7m6sb_di" bpmnElement="Flow_0w7m6sb">
+        <di:waypoint x="610" y="220" />
+        <di:waypoint x="660" y="220" />
+        <di:waypoint x="660" y="170" />
+        <di:waypoint x="695" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1jqpobm_di" bpmnElement="Flow_1jqpobm">
+        <di:waypoint x="610" y="120" />
+        <di:waypoint x="660" y="120" />
+        <di:waypoint x="660" y="170" />
+        <di:waypoint x="695" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0dnwzj2_di" bpmnElement="Flow_0dnwzj2">
+        <di:waypoint x="435" y="170" />
+        <di:waypoint x="458" y="170" />
+        <di:waypoint x="458" y="220" />
+        <di:waypoint x="510" y="220" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="332" y="413" width="35" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_04azx83_di" bpmnElement="Flow_04azx83">
+        <di:waypoint x="435" y="170" />
+        <di:waypoint x="458" y="170" />
+        <di:waypoint x="458" y="120" />
+        <di:waypoint x="510" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="337" y="233" width="46" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1jli4u6_di" bpmnElement="Flow_1jli4u6">
+        <di:waypoint x="350" y="170" />
+        <di:waypoint x="385" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_1a6pj9d_di" bpmnElement="Event_1a6pj9d">
+        <dc:Bounds x="172" y="152" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="158" y="195" width="64" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0vvkd3t_di" bpmnElement="Event_0vvkd3t">
+        <dc:Bounds x="1072" y="152" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1052" y="195" width="76" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_03jfzkd_di" bpmnElement="Gateway_0630ahh">
+        <dc:Bounds x="385" y="145" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0hzy45u_di" bpmnElement="Gateway_1ulvlkx">
+        <dc:Bounds x="695" y="145" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0zqw2ma_di" bpmnElement="retrieve-coffee-order">
+        <dc:Bounds x="250" y="130" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0lksueb_di" bpmnElement="make-coffee">
+        <dc:Bounds x="510" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_07vzscv_di" bpmnElement="retrieve-cup-saucer">
+        <dc:Bounds x="510" y="180" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0e1t380_di" bpmnElement="pour-coffee-in-cup">
+        <dc:Bounds x="790" y="130" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0rkv2t5_di" bpmnElement="deliver-coffee-order">
+        <dc:Bounds x="940" y="130" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0lbuhri_di" bpmnElement="TextAnnotation_0lbuhri" bioc:stroke="#43A047" bioc:fill="#C8E6C9">
+        <dc:Bounds x="342" y="247" width="135" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0eazwei_di" bpmnElement="TextAnnotation_0eazwei" bioc:stroke="#43A047" bioc:fill="#C8E6C9">
+        <dc:Bounds x="655" y="247" width="130" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_1167fph_di" bpmnElement="Association_1167fph">
+        <di:waypoint x="410" y="195" />
+        <di:waypoint x="410" y="242" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1afs0h6_di" bpmnElement="Association_1afs0h6">
+        <di:waypoint x="720" y="195" />
+        <di:waypoint x="720" y="247" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
