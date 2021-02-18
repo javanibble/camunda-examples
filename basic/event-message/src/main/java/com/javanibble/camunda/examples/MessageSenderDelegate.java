@@ -6,14 +6,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+@Component("messageSender")
+public class MessageSenderDelegate implements JavaDelegate {
 
-@Component("logger")
-public class ConsoleLoggerDelegate implements JavaDelegate {
-
-    private final Logger LOGGER = LoggerFactory.getLogger(ConsoleLoggerDelegate.class.getName());
+    private final Logger LOGGER = LoggerFactory.getLogger(MessageSenderDelegate.class.getName());
 
     public void execute(DelegateExecution execution) throws Exception {
-        LOGGER.info("Application for " + execution.getVariable("applicant") + " is approved:" + execution.getVariable("isApplicationApproved"));
+            LOGGER.info("Message Event Process: Sending Message");
     }
+
+
 
 }

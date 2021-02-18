@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_10ni5b4" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.5.0" camunda:diagramRelationId="4e5c6175-6d6a-4bf0-a0e9-55d4be95305d">
+  <bpmn:process id="message-event" name="Message Event" isExecutable="true" camunda:versionTag="1.0.0">
+    <bpmn:endEvent id="end-event-1" name="End Event 1">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0xs2ufs</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:intermediateCatchEvent id="message-intermediate-catch-event" name="Message Intermediate Catch Event">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_13oamaj</bpmn:incoming>
+      <bpmn:outgoing>Flow_0x5819g</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_04odtrc" messageRef="Message_1vg7wav" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:intermediateThrowEvent id="message-intermediate-throw-event" name="Message Intermediate Throw Event">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0x5819g</bpmn:incoming>
+      <bpmn:outgoing>Flow_1wqrgb2</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0ww20ve" camunda:delegateExpression="${messageSender}" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:endEvent id="end-event-2" name="End Event 2">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1h1st3u</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="message-end-event" name="Message End Event">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1vt1sod</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0hz10v5" camunda:delegateExpression="#{messageSender}" />
+    </bpmn:endEvent>
+    <bpmn:startEvent id="message-start-event" name="Message Start Event">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_1897niq</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1xzteyb" messageRef="Message_1hzyyp9" />
+    </bpmn:startEvent>
+    <bpmn:boundaryEvent id="message-boundary-event" name="Message Boundary Event (Interrupting)" attachedToRef="user-task-1">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_10sswrc</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0798uuk" messageRef="Message_1vfwpfr" />
+    </bpmn:boundaryEvent>
+    <bpmn:boundaryEvent id="message-boundary-event-non-interrupting" name="Message Boundary Event (Non-Interrupting)" cancelActivity="false" attachedToRef="user-task-2">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_0trfqvv</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_18k8v9l" messageRef="Message_13d5r2m" />
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_1897niq" sourceRef="message-start-event" targetRef="user-task-1" />
+    <bpmn:sequenceFlow id="Flow_13oamaj" sourceRef="user-task-1" targetRef="message-intermediate-catch-event" />
+    <bpmn:sequenceFlow id="Flow_10sswrc" sourceRef="message-boundary-event" targetRef="user-task-1a" />
+    <bpmn:sequenceFlow id="Flow_0xs2ufs" sourceRef="user-task-1a" targetRef="end-event-1" />
+    <bpmn:sequenceFlow id="Flow_0x5819g" sourceRef="message-intermediate-catch-event" targetRef="message-intermediate-throw-event" />
+    <bpmn:sequenceFlow id="Flow_1wqrgb2" sourceRef="message-intermediate-throw-event" targetRef="user-task-2" />
+    <bpmn:sequenceFlow id="Flow_1vt1sod" sourceRef="user-task-2" targetRef="message-end-event" />
+    <bpmn:sequenceFlow id="Flow_0trfqvv" sourceRef="message-boundary-event-non-interrupting" targetRef="user-task-2a" />
+    <bpmn:sequenceFlow id="Flow_1h1st3u" sourceRef="user-task-2a" targetRef="end-event-2" />
+    <bpmn:subProcess id="Activity_03tfmsl" name="Event Sub-Process" triggeredByEvent="true">
+      <bpmn:startEvent id="message-event-sub-process-interrupting" name="Message Event Sub-Process (Interrupting)">
+        <bpmn:extensionElements>
+          <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+        </bpmn:extensionElements>
+        <bpmn:outgoing>Flow_18cnic9</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_13g1u04" messageRef="Message_12518kb" />
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_18cnic9" sourceRef="message-event-sub-process-interrupting" targetRef="user-task-3" />
+      <bpmn:endEvent id="end-event-3" name="End Event 3">
+        <bpmn:extensionElements>
+          <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_123m7im</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_123m7im" sourceRef="user-task-3" targetRef="end-event-3" />
+      <bpmn:userTask id="user-task-3" name="User Task 3">
+        <bpmn:extensionElements>
+          <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_18cnic9</bpmn:incoming>
+        <bpmn:outgoing>Flow_123m7im</bpmn:outgoing>
+      </bpmn:userTask>
+    </bpmn:subProcess>
+    <bpmn:subProcess id="Activity_0fkkiak" name="Event Sub-Process" triggeredByEvent="true">
+      <bpmn:startEvent id="message-event-sub-process-non-interrupting" name="Message Event Sub-Process (Non-Interrupting)" isInterrupting="false">
+        <bpmn:extensionElements>
+          <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+        </bpmn:extensionElements>
+        <bpmn:outgoing>Flow_0fu7an8</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_04z2lic" messageRef="Message_07cf9se" />
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_0fu7an8" sourceRef="message-event-sub-process-non-interrupting" targetRef="user-task-4" />
+      <bpmn:endEvent id="end-event-4" name="End Event 4">
+        <bpmn:extensionElements>
+          <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_121b652</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_121b652" sourceRef="user-task-4" targetRef="end-event-4" />
+      <bpmn:userTask id="user-task-4" name="User Task 4">
+        <bpmn:extensionElements>
+          <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0fu7an8</bpmn:incoming>
+        <bpmn:outgoing>Flow_121b652</bpmn:outgoing>
+      </bpmn:userTask>
+    </bpmn:subProcess>
+    <bpmn:userTask id="user-task-1" name="User Task 1">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1897niq</bpmn:incoming>
+      <bpmn:outgoing>Flow_13oamaj</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="user-task-2" name="User Task 2">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1wqrgb2</bpmn:incoming>
+      <bpmn:outgoing>Flow_1vt1sod</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="user-task-1a" name="User Task 1A">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_10sswrc</bpmn:incoming>
+      <bpmn:outgoing>Flow_0xs2ufs</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="user-task-2a" name="User Task 2A">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0trfqvv</bpmn:incoming>
+      <bpmn:outgoing>Flow_1h1st3u</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmn:message id="Message_1hzyyp9" name="message-start-event" />
+  <bpmn:message id="Message_1vfwpfr" name="message-boundary-event" />
+  <bpmn:message id="Message_1vg7wav" name="message-intermediate-catch-event" />
+  <bpmn:message id="Message_13d5r2m" name="message-boundary-event-non-interrupting" />
+  <bpmn:message id="Message_12518kb" name="message-event-sub-process-interrupting" />
+  <bpmn:message id="Message_07cf9se" name="message-event-sub-process-non-interrupting" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="message-event">
+      <bpmndi:BPMNEdge id="Flow_1h1st3u_di" bpmnElement="Flow_1h1st3u">
+        <di:waypoint x="840" y="270" />
+        <di:waypoint x="892" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0trfqvv_di" bpmnElement="Flow_0trfqvv">
+        <di:waypoint x="670" y="178" />
+        <di:waypoint x="670" y="270" />
+        <di:waypoint x="740" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1vt1sod_di" bpmnElement="Flow_1vt1sod">
+        <di:waypoint x="740" y="120" />
+        <di:waypoint x="812" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1wqrgb2_di" bpmnElement="Flow_1wqrgb2">
+        <di:waypoint x="568" y="120" />
+        <di:waypoint x="640" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0x5819g_di" bpmnElement="Flow_0x5819g">
+        <di:waypoint x="468" y="120" />
+        <di:waypoint x="532" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0xs2ufs_di" bpmnElement="Flow_0xs2ufs">
+        <di:waypoint x="470" y="270" />
+        <di:waypoint x="522" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10sswrc_di" bpmnElement="Flow_10sswrc">
+        <di:waypoint x="300" y="178" />
+        <di:waypoint x="300" y="270" />
+        <di:waypoint x="370" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13oamaj_di" bpmnElement="Flow_13oamaj">
+        <di:waypoint x="370" y="120" />
+        <di:waypoint x="432" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1897niq_di" bpmnElement="Flow_1897niq">
+        <di:waypoint x="215" y="120" />
+        <di:waypoint x="270" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0o0ztk9_di" bpmnElement="end-event-1">
+        <dc:Bounds x="522" y="252" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="510" y="295" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0nfmyho_di" bpmnElement="message-intermediate-catch-event">
+        <dc:Bounds x="432" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="419" y="145" width="62" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_09nufw3_di" bpmnElement="message-intermediate-throw-event">
+        <dc:Bounds x="532" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="519" y="145" width="62" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0ia1726_di" bpmnElement="end-event-2">
+        <dc:Bounds x="892" y="252" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="880" y="295" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1mxsf7d_di" bpmnElement="message-end-event">
+        <dc:Bounds x="812" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="796" y="145" width="68" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_14wxwaz_di" bpmnElement="message-start-event">
+        <dc:Bounds x="179" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="162" y="145" width="71" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_14kfvxu_di" bpmnElement="user-task-1">
+        <dc:Bounds x="270" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0gsk66b_di" bpmnElement="user-task-2">
+        <dc:Bounds x="640" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1egk6ed_di" bpmnElement="user-task-1a">
+        <dc:Bounds x="370" y="230" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1nhef1k_di" bpmnElement="user-task-2a">
+        <dc:Bounds x="740" y="230" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0nkncpk_di" bpmnElement="Activity_03tfmsl" isExpanded="true">
+        <dc:Bounds x="170" y="350" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_123m7im_di" bpmnElement="Flow_123m7im">
+        <di:waypoint x="405" y="450" />
+        <di:waypoint x="467" y="450" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_18cnic9_di" bpmnElement="Flow_18cnic9">
+        <di:waypoint x="246" y="450" />
+        <di:waypoint x="305" y="450" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_1ibie38_di" bpmnElement="message-event-sub-process-interrupting">
+        <dc:Bounds x="210" y="432" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="190" y="475" width="76" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1kpbec3_di" bpmnElement="end-event-3">
+        <dc:Bounds x="467" y="432" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="455" y="475" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0rykwh3_di" bpmnElement="user-task-3">
+        <dc:Bounds x="305" y="410" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0fkkiak_di" bpmnElement="Activity_0fkkiak" isExpanded="true">
+        <dc:Bounds x="590" y="350" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_121b652_di" bpmnElement="Flow_121b652">
+        <di:waypoint x="820" y="450" />
+        <di:waypoint x="882" y="450" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0fu7an8_di" bpmnElement="Flow_0fu7an8">
+        <di:waypoint x="666" y="450" />
+        <di:waypoint x="720" y="450" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0uu10mg_di" bpmnElement="message-event-sub-process-non-interrupting">
+        <dc:Bounds x="630" y="432" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="605" y="475" width="87" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0j4yi33_di" bpmnElement="end-event-4">
+        <dc:Bounds x="882" y="432" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="870" y="475" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1340fpv_di" bpmnElement="user-task-4">
+        <dc:Bounds x="720" y="410" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0xmh5y5_di" bpmnElement="message-boundary-event">
+        <dc:Bounds x="282" y="142" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="221" y="185" width="79" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_174kiay_di" bpmnElement="message-boundary-event-non-interrupting">
+        <dc:Bounds x="652" y="142" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="676" y="170" width="87" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
