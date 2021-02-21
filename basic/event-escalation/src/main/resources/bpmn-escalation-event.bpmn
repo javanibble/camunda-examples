@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_10ni5b4" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.6.0" camunda:diagramRelationId="4e5c6175-6d6a-4bf0-a0e9-55d4be95305d">
+  <bpmn:message id="Message_1hzyyp9" name="message_start_event" />
+  <bpmn:message id="Message_1vfwpfr" name="message_boundary_event" />
+  <bpmn:message id="Message_1vg7wav" name="message_intermediate_catch_event" />
+  <bpmn:message id="Message_13d5r2m" name="message_boundary_event_non_interrupting" />
+  <bpmn:collaboration id="Collaboration_0x4wglg">
+    <bpmn:participant id="participant-1" name="Participant 1" processRef="escalation-event-process-1" />
+    <bpmn:participant id="participant-2" name="Participant 2" processRef="escalation-event-process-2" />
+  </bpmn:collaboration>
+  <bpmn:process id="escalation-event-process-1" name="Escalation Event Process 1" isExecutable="true" camunda:versionTag="1.0.0">
+    <bpmn:startEvent id="start-event-1" name="Start Event 1">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_1897niq</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:callActivity id="call-activity-1" name="Call Activity 1" calledElement="escalation-event-process-2" camunda:calledElementBinding="versionTag" camunda:calledElementVersionTag="1.0.0">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+        <camunda:inputOutput>
+          <camunda:inputParameter name="call_activity">1</camunda:inputParameter>
+        </camunda:inputOutput>
+        <camunda:in source="call_activity" target="call_activity" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1897niq</bpmn:incoming>
+      <bpmn:outgoing>Flow_00it2dm</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:subProcess id="event-sub-process-1" name="Event Sub-Process 1" triggeredByEvent="true">
+      <bpmn:sequenceFlow id="Flow_18cnic9" sourceRef="escalation-event-sub-process-interrupting-1" targetRef="manual-task-3" />
+      <bpmn:endEvent id="end-event-4" name="End Event 4">
+        <bpmn:extensionElements>
+          <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_123m7im</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_123m7im" sourceRef="manual-task-3" targetRef="end-event-4" />
+      <bpmn:startEvent id="escalation-event-sub-process-interrupting-1" name="Escalation Event Sub-Process (Interrupting) 1">
+        <bpmn:extensionElements>
+          <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+        </bpmn:extensionElements>
+        <bpmn:outgoing>Flow_18cnic9</bpmn:outgoing>
+        <bpmn:escalationEventDefinition id="EscalationEventDefinition_0wq10fc" escalationRef="Escalation_0jkl2fl" />
+      </bpmn:startEvent>
+      <bpmn:manualTask id="manual-task-3" name="Manual Task 3">
+        <bpmn:extensionElements>
+          <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_18cnic9</bpmn:incoming>
+        <bpmn:outgoing>Flow_123m7im</bpmn:outgoing>
+      </bpmn:manualTask>
+    </bpmn:subProcess>
+    <bpmn:subProcess id="event-sub-process-2" name="Event Sub-Process 2" triggeredByEvent="true">
+      <bpmn:sequenceFlow id="Flow_0fu7an8" sourceRef="escalation-event-sub-process-non-interrupting-1" targetRef="manual-task-4" />
+      <bpmn:endEvent id="end-event-5" name="End Event 5">
+        <bpmn:extensionElements>
+          <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_121b652</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_121b652" sourceRef="manual-task-4" targetRef="end-event-5" />
+      <bpmn:startEvent id="escalation-event-sub-process-non-interrupting-1" name="Escalation Event Sub-Process (Non-Interrupting) 1" isInterrupting="false">
+        <bpmn:extensionElements>
+          <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+        </bpmn:extensionElements>
+        <bpmn:outgoing>Flow_0fu7an8</bpmn:outgoing>
+        <bpmn:escalationEventDefinition id="EscalationEventDefinition_0l63el0" escalationRef="Escalation_0j8zara" />
+      </bpmn:startEvent>
+      <bpmn:manualTask id="manual-task-4" name="Manual Task 4">
+        <bpmn:extensionElements>
+          <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0fu7an8</bpmn:incoming>
+        <bpmn:outgoing>Flow_121b652</bpmn:outgoing>
+      </bpmn:manualTask>
+    </bpmn:subProcess>
+    <bpmn:sequenceFlow id="Flow_0trfqvv" sourceRef="escalation-boundary-event-interrupting" targetRef="manual-task-2" />
+    <bpmn:sequenceFlow id="Flow_0xs2ufs" sourceRef="manual-task-1" targetRef="end-event-1" />
+    <bpmn:sequenceFlow id="Flow_10sswrc" sourceRef="escalation-boundary-event-non-interrupting" targetRef="manual-task-1" />
+    <bpmn:sequenceFlow id="Flow_1897niq" sourceRef="start-event-1" targetRef="call-activity-1" />
+    <bpmn:boundaryEvent id="escalation-boundary-event-non-interrupting" name="Escalation Boundary Event (Non-Interrupting)" cancelActivity="false" attachedToRef="call-activity-1">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_10sswrc</bpmn:outgoing>
+      <bpmn:escalationEventDefinition id="EscalationEventDefinition_15xkiz1" escalationRef="Escalation_0d26l8o" />
+    </bpmn:boundaryEvent>
+    <bpmn:manualTask id="manual-task-1" name="Manual Task 1">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_10sswrc</bpmn:incoming>
+      <bpmn:outgoing>Flow_0xs2ufs</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:endEvent id="end-event-1" name="End Event 1">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0xs2ufs</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_00dn9be" sourceRef="call-activity-3" targetRef="end-event-3" />
+    <bpmn:sequenceFlow id="Flow_1uropk9" sourceRef="call-activity-2" targetRef="end-event-2" />
+    <bpmn:sequenceFlow id="Flow_00it2dm" sourceRef="call-activity-1" targetRef="Activity_1s9caxt" />
+    <bpmn:sequenceFlow id="Flow_0o8m92g" sourceRef="Activity_1s9caxt" targetRef="call-activity-2" />
+    <bpmn:sequenceFlow id="Flow_1h9n0aw" sourceRef="manual-task-2" targetRef="user-task-2" />
+    <bpmn:sequenceFlow id="Flow_1l483p3" sourceRef="user-task-2" targetRef="call-activity-3" />
+    <bpmn:endEvent id="end-event-3" name="End Event 3">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_00dn9be</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:callActivity id="call-activity-3" name="Call Activity 3" calledElement="escalation-event-process-2" camunda:calledElementBinding="versionTag" camunda:calledElementVersionTag="1.0.0">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="call_activity">3</camunda:inputParameter>
+        </camunda:inputOutput>
+        <camunda:in source="call_activity" target="call_activity" />
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1l483p3</bpmn:incoming>
+      <bpmn:outgoing>Flow_00dn9be</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:userTask id="user-task-2" name="User Task 2">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1h9n0aw</bpmn:incoming>
+      <bpmn:outgoing>Flow_1l483p3</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:manualTask id="manual-task-2" name="Manual Task 2">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0trfqvv</bpmn:incoming>
+      <bpmn:outgoing>Flow_1h9n0aw</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:endEvent id="end-event-2" name="End Event 2">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1uropk9</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:callActivity id="call-activity-2" name="Call Activity 2" calledElement="escalation-event-process-2" camunda:calledElementBinding="versionTag" camunda:calledElementVersionTag="1.0.0">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+        <camunda:inputOutput>
+          <camunda:inputParameter name="call_activity">2</camunda:inputParameter>
+        </camunda:inputOutput>
+        <camunda:in source="call_activity" target="call_activity" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0o8m92g</bpmn:incoming>
+      <bpmn:outgoing>Flow_1uropk9</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:boundaryEvent id="escalation-boundary-event-interrupting" name="Escalation Boundary Event (Interrupting)" attachedToRef="call-activity-2">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_0trfqvv</bpmn:outgoing>
+      <bpmn:escalationEventDefinition id="EscalationEventDefinition_0r4jc4r" escalationRef="Escalation_0d26l8o" />
+    </bpmn:boundaryEvent>
+    <bpmn:userTask id="Activity_1s9caxt" name="User Task 1">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_00it2dm</bpmn:incoming>
+      <bpmn:outgoing>Flow_0o8m92g</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmn:process id="escalation-event-process-2" name="Escalation Event Process 2" isExecutable="true" camunda:versionTag="1.0.0">
+    <bpmn:startEvent id="start-event-2" name="Start Event 2">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_1c98i3n</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1c98i3n" sourceRef="start-event-2" targetRef="manual-task-5" />
+    <bpmn:sequenceFlow id="Flow_1mz8pmt" sourceRef="manual-task-5" targetRef="escalation-intermediate-throw-event-1" />
+    <bpmn:sequenceFlow id="Flow_0oql6fi" sourceRef="escalation-intermediate-throw-event-1" targetRef="manual-task-6" />
+    <bpmn:sequenceFlow id="Flow_11kx8gy" sourceRef="manual-task-6" targetRef="escalation-intermediate-throw-event-2" />
+    <bpmn:manualTask id="manual-task-5" name="Manual Task 5">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1c98i3n</bpmn:incoming>
+      <bpmn:outgoing>Flow_1mz8pmt</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:sequenceFlow id="Flow_0fn4hz9" name="Call Activity 2" sourceRef="exclusive-gateway" targetRef="end-event-6">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{call_activity == 2}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1lsk660" sourceRef="escalation-intermediate-throw-event-2" targetRef="exclusive-gateway" />
+    <bpmn:sequenceFlow id="Flow_0bjjvt7" name="Call Activity 3" sourceRef="exclusive-gateway" targetRef="escalation-end-event-2">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{call_activity == 3}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="exclusive-gateway" name="Exclusive Gateway">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1lsk660</bpmn:incoming>
+      <bpmn:outgoing>Flow_0fn4hz9</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0bjjvt7</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1eigsx5</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:intermediateThrowEvent id="escalation-intermediate-throw-event-2" name="Escalation Intermediate Throw Event 2">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_11kx8gy</bpmn:incoming>
+      <bpmn:outgoing>Flow_1lsk660</bpmn:outgoing>
+      <bpmn:escalationEventDefinition id="EscalationEventDefinition_08ocwra" escalationRef="Escalation_0d26l8o" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:manualTask id="manual-task-6" name="Manual Task 6">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0oql6fi</bpmn:incoming>
+      <bpmn:outgoing>Flow_11kx8gy</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:intermediateThrowEvent id="escalation-intermediate-throw-event-1" name="Escalation Intermediate Throw Event 1">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1mz8pmt</bpmn:incoming>
+      <bpmn:outgoing>Flow_0oql6fi</bpmn:outgoing>
+      <bpmn:escalationEventDefinition id="EscalationEventDefinition_1c6ycre" escalationRef="Escalation_0j8zara" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:subProcess id="Activity_0t3hvsi" triggeredByEvent="true">
+      <bpmn:startEvent id="escalation-event-sub-process-non-interrupting-2" name="Escalation Event Sub-Process (Non-Interrupting) 2" isInterrupting="false">
+        <bpmn:extensionElements>
+          <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+        </bpmn:extensionElements>
+        <bpmn:outgoing>Flow_0gf8q1k</bpmn:outgoing>
+        <bpmn:escalationEventDefinition id="EscalationEventDefinition_0hm7j0u" escalationRef="Escalation_0cx07iu" />
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_0gf8q1k" sourceRef="escalation-event-sub-process-non-interrupting-2" targetRef="manual-task-7" />
+      <bpmn:endEvent id="end-event-7" name="End Event 7">
+        <bpmn:extensionElements>
+          <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1ygw1q0</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_1ygw1q0" sourceRef="manual-task-7" targetRef="end-event-7" />
+      <bpmn:manualTask id="manual-task-7" name="Manual Task 7">
+        <bpmn:extensionElements>
+          <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0gf8q1k</bpmn:incoming>
+        <bpmn:outgoing>Flow_1ygw1q0</bpmn:outgoing>
+      </bpmn:manualTask>
+    </bpmn:subProcess>
+    <bpmn:sequenceFlow id="Flow_1eigsx5" name="Call Activity 1" sourceRef="exclusive-gateway" targetRef="escalation-end-event-1">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{call_activity == 1}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="escalation-end-event-2" name="Escalation End Event 2">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0bjjvt7</bpmn:incoming>
+      <bpmn:escalationEventDefinition id="EscalationEventDefinition_0jgvaon" escalationRef="Escalation_0jkl2fl" />
+    </bpmn:endEvent>
+    <bpmn:endEvent id="escalation-end-event-1" name="Escalation End Event 1">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1eigsx5</bpmn:incoming>
+      <bpmn:escalationEventDefinition id="EscalationEventDefinition_0ji2yuv" escalationRef="Escalation_0cx07iu" />
+    </bpmn:endEvent>
+    <bpmn:endEvent id="end-event-6" name="End Event 6">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${executionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0fn4hz9</bpmn:incoming>
+    </bpmn:endEvent>
+  </bpmn:process>
+  <bpmn:escalation id="Escalation_0jkl2fl" name="escalation-name-3" escalationCode="CODE3" />
+  <bpmn:escalation id="Escalation_0j8zara" name="escalation-name-1" escalationCode="CODE1" />
+  <bpmn:escalation id="Escalation_0d26l8o" name="escalation-name-2" escalationCode="CODE2" />
+  <bpmn:escalation id="Escalation_0cx07iu" name="escalation-name-4" escalationCode="CODE4" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0x4wglg">
+      <bpmndi:BPMNShape id="Participant_1rflysg_di" bpmnElement="participant-1" isHorizontal="true">
+        <dc:Bounds x="120" y="80" width="930" height="570" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0o8m92g_di" bpmnElement="Flow_0o8m92g">
+        <di:waypoint x="530" y="200" />
+        <di:waypoint x="590" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00it2dm_di" bpmnElement="Flow_00it2dm">
+        <di:waypoint x="370" y="200" />
+        <di:waypoint x="430" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1uropk9_di" bpmnElement="Flow_1uropk9">
+        <di:waypoint x="690" y="200" />
+        <di:waypoint x="742" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00dn9be_di" bpmnElement="Flow_00dn9be">
+        <di:waypoint x="930" y="200" />
+        <di:waypoint x="982" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1897niq_di" bpmnElement="Flow_1897niq">
+        <di:waypoint x="215" y="200" />
+        <di:waypoint x="270" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10sswrc_di" bpmnElement="Flow_10sswrc">
+        <di:waypoint x="290" y="258" />
+        <di:waypoint x="290" y="350" />
+        <di:waypoint x="320" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0xs2ufs_di" bpmnElement="Flow_0xs2ufs">
+        <di:waypoint x="420" y="350" />
+        <di:waypoint x="462" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0trfqvv_di" bpmnElement="Flow_0trfqvv">
+        <di:waypoint x="610" y="258" />
+        <di:waypoint x="610" y="349" />
+        <di:waypoint x="680" y="349" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1h9n0aw_di" bpmnElement="Flow_1h9n0aw">
+        <di:waypoint x="780" y="350" />
+        <di:waypoint x="830" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1l483p3_di" bpmnElement="Flow_1l483p3">
+        <di:waypoint x="880" y="310" />
+        <di:waypoint x="880" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_1xj6ern_di" bpmnElement="start-event-1">
+        <dc:Bounds x="179" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="165" y="225" width="64" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0d6nlbo_di" bpmnElement="call-activity-1">
+        <dc:Bounds x="270" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0rof1ye_di" bpmnElement="end-event-3">
+        <dc:Bounds x="982" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="970" y="225" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ymk0th_di" bpmnElement="call-activity-3">
+        <dc:Bounds x="830" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0fzr0pr_di" bpmnElement="user-task-2">
+        <dc:Bounds x="830" y="310" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0h0z03d_di" bpmnElement="manual-task-2">
+        <dc:Bounds x="680" y="310" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0pffu2s_di" bpmnElement="end-event-2">
+        <dc:Bounds x="742" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="730" y="225" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0rfry4v_di" bpmnElement="call-activity-2">
+        <dc:Bounds x="590" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ti1xf3_di" bpmnElement="Activity_1s9caxt">
+        <dc:Bounds x="430" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0nkncpk_di" bpmnElement="event-sub-process-1" isExpanded="true">
+        <dc:Bounds x="170" y="430" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_123m7im_di" bpmnElement="Flow_123m7im">
+        <di:waypoint x="405" y="530" />
+        <di:waypoint x="467" y="530" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_18cnic9_di" bpmnElement="Flow_18cnic9">
+        <di:waypoint x="246" y="530" />
+        <di:waypoint x="305" y="530" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_1kpbec3_di" bpmnElement="end-event-4">
+        <dc:Bounds x="467" y="512" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="455" y="555" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1ushv8r_di" bpmnElement="escalation-event-sub-process-interrupting-1" bioc:stroke="#1E88E5" bioc:fill="#BBDEFB">
+        <dc:Bounds x="210" y="512" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="187" y="555" width="82" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_10g8z2p_di" bpmnElement="manual-task-3">
+        <dc:Bounds x="305" y="490" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0fkkiak_di" bpmnElement="event-sub-process-2" isExpanded="true">
+        <dc:Bounds x="590" y="430" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_121b652_di" bpmnElement="Flow_121b652">
+        <di:waypoint x="820" y="530" />
+        <di:waypoint x="882" y="530" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0fu7an8_di" bpmnElement="Flow_0fu7an8">
+        <di:waypoint x="666" y="530" />
+        <di:waypoint x="720" y="530" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0j4yi33_di" bpmnElement="end-event-5">
+        <dc:Bounds x="882" y="512" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="871" y="555" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1f2l4jo_di" bpmnElement="escalation-event-sub-process-non-interrupting-1" bioc:stroke="#43A047" bioc:fill="#C8E6C9">
+        <dc:Bounds x="630" y="512" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="605" y="555" width="87" height="53" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0vdth4z_di" bpmnElement="manual-task-4">
+        <dc:Bounds x="720" y="490" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_18gtt5a_di" bpmnElement="manual-task-1">
+        <dc:Bounds x="320" y="310" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0o0ztk9_di" bpmnElement="end-event-1">
+        <dc:Bounds x="462" y="332" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="450" y="375" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0sn05il_di" bpmnElement="escalation-boundary-event-non-interrupting" bioc:stroke="#8E24AA" bioc:fill="#E1BEE7">
+        <dc:Bounds x="272" y="222" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="196" y="250" width="87" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_11vo7rh_di" bpmnElement="escalation-boundary-event-interrupting" bioc:fill="#E1BEE7">
+        <dc:Bounds x="592" y="222" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="620" y="250" width="79" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Participant_1kwk5oe_di" bpmnElement="participant-2" isHorizontal="true">
+        <dc:Bounds x="120" y="680" width="930" height="490" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0bjjvt7_di" bpmnElement="Flow_0bjjvt7">
+        <di:waypoint x="800" y="825" />
+        <di:waypoint x="800" y="1010" />
+        <di:waypoint x="962" y="1010" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="845" y="983" width="67" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1lsk660_di" bpmnElement="Flow_1lsk660">
+        <di:waypoint x="708" y="800" />
+        <di:waypoint x="775" y="800" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0fn4hz9_di" bpmnElement="Flow_0fn4hz9">
+        <di:waypoint x="800" y="825" />
+        <di:waypoint x="800" y="910" />
+        <di:waypoint x="962" y="910" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="845" y="892" width="67" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11kx8gy_di" bpmnElement="Flow_11kx8gy">
+        <di:waypoint x="610" y="800" />
+        <di:waypoint x="672" y="800" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0oql6fi_di" bpmnElement="Flow_0oql6fi">
+        <di:waypoint x="458" y="800" />
+        <di:waypoint x="510" y="800" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1mz8pmt_di" bpmnElement="Flow_1mz8pmt">
+        <di:waypoint x="370" y="800" />
+        <di:waypoint x="422" y="800" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1c98i3n_di" bpmnElement="Flow_1c98i3n">
+        <di:waypoint x="228" y="800" />
+        <di:waypoint x="270" y="800" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1eigsx5_di" bpmnElement="Flow_1eigsx5">
+        <di:waypoint x="825" y="800" />
+        <di:waypoint x="962" y="800" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="845" y="773" width="67" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0rdtsb5_di" bpmnElement="start-event-2">
+        <dc:Bounds x="192" y="782" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="179" y="825" width="64" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1xa2z2r_di" bpmnElement="manual-task-5">
+        <dc:Bounds x="270" y="760" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1vndh2j_di" bpmnElement="exclusive-gateway" isMarkerVisible="true">
+        <dc:Bounds x="775" y="775" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="777" y="745" width="47" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1cxlz5p_di" bpmnElement="escalation-intermediate-throw-event-2" bioc:stroke="#8E24AA" bioc:fill="#E1BEE7">
+        <dc:Bounds x="672" y="782" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="655" y="825" width="71" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_00lvkms_di" bpmnElement="manual-task-6">
+        <dc:Bounds x="510" y="760" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_05qxmqs_di" bpmnElement="escalation-intermediate-throw-event-1" bioc:stroke="#43A047" bioc:fill="#C8E6C9">
+        <dc:Bounds x="422" y="782" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="406" y="825" width="71" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_157mks0_di" bpmnElement="escalation-end-event-2" bioc:stroke="#1E88E5" bioc:fill="#BBDEFB">
+        <dc:Bounds x="962" y="992" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="943" y="1035" width="74" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0kmrzvd_di" bpmnElement="escalation-end-event-1" bioc:stroke="rgb(251, 140, 0)" bioc:fill="rgb(255, 224, 178)">
+        <dc:Bounds x="962" y="782" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="943" y="825" width="74" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1s7y3t7_di" bpmnElement="end-event-6">
+        <dc:Bounds x="962" y="892" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="950" y="935" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ed1aem_di" bpmnElement="Activity_0t3hvsi" isExpanded="true">
+        <dc:Bounds x="180" y="930" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1ygw1q0_di" bpmnElement="Flow_1ygw1q0">
+        <di:waypoint x="410" y="1030" />
+        <di:waypoint x="472" y="1030" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0gf8q1k_di" bpmnElement="Flow_0gf8q1k">
+        <di:waypoint x="256" y="1030" />
+        <di:waypoint x="310" y="1030" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_1gedmsa_di" bpmnElement="escalation-event-sub-process-non-interrupting-2" bioc:stroke="rgb(251, 140, 0)" bioc:fill="rgb(255, 224, 178)">
+        <dc:Bounds x="220" y="1012" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="195" y="1055" width="87" height="53" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1cc2bbb_di" bpmnElement="end-event-7">
+        <dc:Bounds x="472" y="1012" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="460" y="1055" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0gbrpfg_di" bpmnElement="manual-task-7">
+        <dc:Bounds x="310" y="990" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
