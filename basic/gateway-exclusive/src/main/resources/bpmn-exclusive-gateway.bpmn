@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.5.0" camunda:diagramRelationId="d1451d16-cbf4-4a65-b57e-930251e9548c">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.6.0" camunda:diagramRelationId="d1451d16-cbf4-4a65-b57e-930251e9548c">
   <bpmn:process id="order-coffee" name="Order Coffee" isExecutable="true" camunda:versionTag="1.0.0">
     <bpmn:exclusiveGateway id="Gateway_0630ahh" name="Choice of&#10;Coffee?" default="Flow_0dnwzj2">
       <bpmn:incoming>Flow_1jli4u6</bpmn:incoming>
@@ -37,11 +37,11 @@
       <bpmn:incoming>Flow_00iop9r</bpmn:incoming>
       <bpmn:outgoing>Flow_1jli4u6</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="make-espresso" name="Make&#10;Espresso" camunda:delegateExpression="${logger}">
+    <bpmn:serviceTask id="make-espresso" name="Make Espresso" camunda:delegateExpression="${logger}">
       <bpmn:incoming>Flow_04azx83</bpmn:incoming>
       <bpmn:outgoing>Flow_1jqpobm</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="make-caffe-mocha" name="Make&#10;Caffè Mocha" camunda:delegateExpression="${logger}">
+    <bpmn:serviceTask id="make-caffe-mocha" name="Make Caffè Mocha" camunda:delegateExpression="${logger}">
       <bpmn:incoming>Flow_085zy7o</bpmn:incoming>
       <bpmn:outgoing>Flow_0d24z3v</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -64,12 +64,6 @@
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="order-coffee">
-      <bpmndi:BPMNShape id="TextAnnotation_0lbuhri_di" bpmnElement="TextAnnotation_0lbuhri" bioc:stroke="#43A047" bioc:fill="#C8E6C9">
-        <dc:Bounds x="340" y="280" width="150" height="40" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_0eazwei_di" bpmnElement="TextAnnotation_0eazwei" bioc:stroke="#43A047" bioc:fill="#C8E6C9">
-        <dc:Bounds x="900" y="280" width="130" height="40" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0byan59_di" bpmnElement="Flow_0byan59">
         <di:waypoint x="1060" y="210" />
         <di:waypoint x="1142" y="210" />
@@ -158,6 +152,12 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_18mt71z_di" bpmnElement="deliver-coffee-order">
         <dc:Bounds x="960" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0lbuhri_di" bpmnElement="TextAnnotation_0lbuhri" bioc:stroke="#43A047" bioc:fill="#C8E6C9">
+        <dc:Bounds x="340" y="280" width="150" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0eazwei_di" bpmnElement="TextAnnotation_0eazwei" bioc:stroke="#43A047" bioc:fill="#C8E6C9">
+        <dc:Bounds x="900" y="280" width="130" height="40" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Association_1167fph_di" bpmnElement="Association_1167fph">
         <di:waypoint x="486" y="221" />
