@@ -9,5 +9,4 @@ public class BasicManualTaskApplication {
     public static void main(String[] args) {
         SpringApplication.run(BasicManualTaskApplication.class);
     }
-
 }
