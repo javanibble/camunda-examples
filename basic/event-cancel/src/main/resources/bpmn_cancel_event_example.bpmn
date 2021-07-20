@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_0d5t0ca" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.9.0">
+  <bpmn:process id="cancel-event-process" name="Cancel Event Process" isExecutable="true" camunda:versionTag="1.0.0">
+    <bpmn:startEvent id="start_event_book_flight" name="Book Flight">
+      <bpmn:outgoing>Flow_1ijtz0p</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:transaction id="transaction_flight_booking_payment" name="Flight Booking &#38; Payment">
+      <bpmn:incoming>Flow_0tocst9</bpmn:incoming>
+      <bpmn:outgoing>Flow_1j88d05</bpmn:outgoing>
+      <bpmn:startEvent id="start_event_book_flight_payment" name="Book Flight Ticket &#38; Payment">
+        <bpmn:outgoing>Flow_0ebx56z</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:endEvent id="Event_0pesxju" name="Flight Booked">
+        <bpmn:incoming>Flow_1bf6wml</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_1bf6wml" sourceRef="task_charge_credit_card" targetRef="Event_0pesxju" />
+      <bpmn:boundaryEvent id="Event_0xp6tub" attachedToRef="task_charge_credit_card">
+        <bpmn:outgoing>Flow_09qtzj6</bpmn:outgoing>
+        <bpmn:errorEventDefinition id="ErrorEventDefinition_04x22m5" />
+      </bpmn:boundaryEvent>
+      <bpmn:sequenceFlow id="Flow_09qtzj6" sourceRef="Event_0xp6tub" targetRef="Event_1i8o8nf" />
+      <bpmn:endEvent id="Event_1i8o8nf" name="Booking Failure">
+        <bpmn:incoming>Flow_09qtzj6</bpmn:incoming>
+        <bpmn:cancelEventDefinition id="CancelEventDefinition_0tsn679" />
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_0ebx56z" sourceRef="start_event_book_flight_payment" targetRef="task_make_flight_reservation" />
+      <bpmn:boundaryEvent id="Event_1bq63rb" attachedToRef="task_make_flight_reservation">
+        <bpmn:compensateEventDefinition id="CompensateEventDefinition_0vz2wz2" />
+      </bpmn:boundaryEvent>
+      <bpmn:manualTask id="task_cancel_flight_reservation" name="Cancel Flight Reservation" isForCompensation="true">
+        <bpmn:extensionElements>
+          <camunda:executionListener delegateExpression="${taskexecutionlistener}" event="start" />
+        </bpmn:extensionElements>
+      </bpmn:manualTask>
+      <bpmn:sequenceFlow id="Flow_1yq3rp9" sourceRef="task_make_hotel_reservation" targetRef="task_make_car_reservation" />
+      <bpmn:sequenceFlow id="Flow_1upgnj0" sourceRef="task_make_flight_reservation" targetRef="task_make_hotel_reservation" />
+      <bpmn:sequenceFlow id="Flow_0az1mzb" sourceRef="task_make_car_reservation" targetRef="task_charge_credit_card" />
+      <bpmn:boundaryEvent id="Event_02kzisy" attachedToRef="task_make_flight_reservation">
+        <bpmn:outgoing>Flow_0nkhpfh</bpmn:outgoing>
+        <bpmn:errorEventDefinition id="ErrorEventDefinition_0sl80cf" />
+      </bpmn:boundaryEvent>
+      <bpmn:sequenceFlow id="Flow_0nkhpfh" sourceRef="Event_02kzisy" targetRef="Event_0gwnl5p" />
+      <bpmn:endEvent id="Event_0gwnl5p" name="Booking Failure">
+        <bpmn:incoming>Flow_0nkhpfh</bpmn:incoming>
+        <bpmn:cancelEventDefinition id="CancelEventDefinition_1qnaf2u" />
+      </bpmn:endEvent>
+      <bpmn:boundaryEvent id="Event_1hmmfng" attachedToRef="task_make_hotel_reservation">
+        <bpmn:compensateEventDefinition id="CompensateEventDefinition_0z2fac2" />
+      </bpmn:boundaryEvent>
+      <bpmn:boundaryEvent id="Event_13fcsne" attachedToRef="task_make_hotel_reservation">
+        <bpmn:outgoing>Flow_0zjp0s4</bpmn:outgoing>
+        <bpmn:errorEventDefinition id="ErrorEventDefinition_0dt9wy8" />
+      </bpmn:boundaryEvent>
+      <bpmn:sequenceFlow id="Flow_0zjp0s4" sourceRef="Event_13fcsne" targetRef="Event_06yfzje" />
+      <bpmn:endEvent id="Event_06yfzje" name="Booking Failure">
+        <bpmn:incoming>Flow_0zjp0s4</bpmn:incoming>
+        <bpmn:cancelEventDefinition id="CancelEventDefinition_0asuva6" />
+      </bpmn:endEvent>
+      <bpmn:manualTask id="task_cancel_hotel_reservation" name="Cancel Hotel Reservation" isForCompensation="true">
+        <bpmn:extensionElements>
+          <camunda:executionListener delegateExpression="${taskexecutionlistener}" event="start" />
+        </bpmn:extensionElements>
+      </bpmn:manualTask>
+      <bpmn:boundaryEvent id="Event_003r142" attachedToRef="task_make_car_reservation">
+        <bpmn:compensateEventDefinition id="CompensateEventDefinition_1xlct68" />
+      </bpmn:boundaryEvent>
+      <bpmn:manualTask id="task_cancel_car_reservation" name="Cancel Car Reservation" isForCompensation="true">
+        <bpmn:extensionElements>
+          <camunda:executionListener delegateExpression="${taskexecutionlistener}" event="start" />
+        </bpmn:extensionElements>
+      </bpmn:manualTask>
+      <bpmn:serviceTask id="task_make_flight_reservation" name="Make Flight Reservation" camunda:delegateExpression="${servicetaskdelegate}">
+        <bpmn:extensionElements>
+          <camunda:executionListener delegateExpression="${taskexecutionlistener}" event="start" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0ebx56z</bpmn:incoming>
+        <bpmn:outgoing>Flow_1upgnj0</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:serviceTask id="task_make_hotel_reservation" name="Make Hotel Reservation" camunda:delegateExpression="${servicetaskdelegate}">
+        <bpmn:extensionElements>
+          <camunda:executionListener delegateExpression="${taskexecutionlistener}" event="start" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1upgnj0</bpmn:incoming>
+        <bpmn:outgoing>Flow_1yq3rp9</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:serviceTask id="task_make_car_reservation" name="Make Car Reservation" camunda:delegateExpression="${servicetaskdelegate}">
+        <bpmn:extensionElements>
+          <camunda:executionListener delegateExpression="${taskexecutionlistener}" event="start" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1yq3rp9</bpmn:incoming>
+        <bpmn:outgoing>Flow_0az1mzb</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:serviceTask id="task_charge_credit_card" name="Charge Credit Card" camunda:delegateExpression="${servicetaskdelegate}">
+        <bpmn:extensionElements>
+          <camunda:executionListener delegateExpression="${taskexecutionlistener}" event="start" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0az1mzb</bpmn:incoming>
+        <bpmn:outgoing>Flow_1bf6wml</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:boundaryEvent id="Event_1rrtf74" attachedToRef="task_make_car_reservation">
+        <bpmn:outgoing>Flow_14gosyu</bpmn:outgoing>
+        <bpmn:errorEventDefinition id="ErrorEventDefinition_08ts80j" />
+      </bpmn:boundaryEvent>
+      <bpmn:sequenceFlow id="Flow_14gosyu" sourceRef="Event_1rrtf74" targetRef="Event_0qkwdwj" />
+      <bpmn:endEvent id="Event_0qkwdwj" name="Booking Failure">
+        <bpmn:incoming>Flow_14gosyu</bpmn:incoming>
+        <bpmn:cancelEventDefinition id="CancelEventDefinition_1ikk0kx" />
+      </bpmn:endEvent>
+      <bpmn:association id="Association_1ewsxxz" associationDirection="One" sourceRef="Event_1bq63rb" targetRef="task_cancel_flight_reservation" />
+      <bpmn:association id="Association_0u5yos3" associationDirection="One" sourceRef="Event_1hmmfng" targetRef="task_cancel_hotel_reservation" />
+      <bpmn:association id="Association_1q1qxka" associationDirection="One" sourceRef="Event_003r142" targetRef="task_cancel_car_reservation" />
+    </bpmn:transaction>
+    <bpmn:boundaryEvent id="Event_1p5a5b7" attachedToRef="transaction_flight_booking_payment">
+      <bpmn:outgoing>Flow_0dv4a22</bpmn:outgoing>
+      <bpmn:cancelEventDefinition id="CancelEventDefinition_07su5xd" />
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_1ijtz0p" sourceRef="start_event_book_flight" targetRef="task_retrieve_booking_details" />
+    <bpmn:sequenceFlow id="Flow_0tocst9" sourceRef="task_retrieve_booking_details" targetRef="transaction_flight_booking_payment" />
+    <bpmn:sequenceFlow id="Flow_0dv4a22" sourceRef="Event_1p5a5b7" targetRef="task_display_booking_failure" />
+    <bpmn:endEvent id="Event_1bq1bgo" name="Payment Failure">
+      <bpmn:incoming>Flow_1shbvac</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1shbvac" sourceRef="task_display_booking_failure" targetRef="Event_1bq1bgo" />
+    <bpmn:sequenceFlow id="Flow_1j88d05" sourceRef="transaction_flight_booking_payment" targetRef="task_display_booking_successful" />
+    <bpmn:endEvent id="Event_161hdag" name="Flight Booked">
+      <bpmn:incoming>Flow_1aq362u</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1aq362u" sourceRef="task_display_booking_successful" targetRef="Event_161hdag" />
+    <bpmn:manualTask id="task_retrieve_booking_details" name="Retrieve Booking Details">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${taskexecutionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1ijtz0p</bpmn:incoming>
+      <bpmn:outgoing>Flow_0tocst9</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:manualTask id="task_display_booking_successful" name="Display Booking Successful">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${taskexecutionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1j88d05</bpmn:incoming>
+      <bpmn:outgoing>Flow_1aq362u</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:manualTask id="task_display_booking_failure" name="Display Booking Failure">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${taskexecutionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0dv4a22</bpmn:incoming>
+      <bpmn:outgoing>Flow_1shbvac</bpmn:outgoing>
+    </bpmn:manualTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="cancel-event-process">
+      <bpmndi:BPMNEdge id="Flow_1aq362u_di" bpmnElement="Flow_1aq362u">
+        <di:waypoint x="1400" y="267" />
+        <di:waypoint x="1452" y="267" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1j88d05_di" bpmnElement="Flow_1j88d05">
+        <di:waypoint x="1220" y="267" />
+        <di:waypoint x="1300" y="267" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1shbvac_di" bpmnElement="Flow_1shbvac">
+        <di:waypoint x="1400" y="400" />
+        <di:waypoint x="1452" y="400" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0dv4a22_di" bpmnElement="Flow_0dv4a22">
+        <di:waypoint x="1238" y="400" />
+        <di:waypoint x="1300" y="400" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tocst9_di" bpmnElement="Flow_0tocst9">
+        <di:waypoint x="350" y="267" />
+        <di:waypoint x="410" y="267" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ijtz0p_di" bpmnElement="Flow_1ijtz0p">
+        <di:waypoint x="198" y="267" />
+        <di:waypoint x="250" y="267" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="start_event_book_flight">
+        <dc:Bounds x="162" y="249" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="152" y="292" width="56" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ue697m_di" bpmnElement="task_retrieve_booking_details">
+        <dc:Bounds x="250" y="227" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_05bqb4f_di" bpmnElement="task_display_booking_successful">
+        <dc:Bounds x="1300" y="227" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_08udemu_di" bpmnElement="task_display_booking_failure">
+        <dc:Bounds x="1300" y="360" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1bq1bgo_di" bpmnElement="Event_1bq1bgo">
+        <dc:Bounds x="1452" y="382" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1430" y="425" width="81" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_161hdag_di" bpmnElement="Event_161hdag">
+        <dc:Bounds x="1452" y="249" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1436" y="292" width="68" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0xpwe3g_di" bpmnElement="transaction_flight_booking_payment" isExpanded="true">
+        <dc:Bounds x="410" y="80" width="810" height="430" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0ebx56z_di" bpmnElement="Flow_0ebx56z">
+        <di:waypoint x="468" y="267" />
+        <di:waypoint x="510" y="267" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09qtzj6_di" bpmnElement="Flow_09qtzj6">
+        <di:waypoint x="1030" y="209" />
+        <di:waypoint x="1030" y="140" />
+        <di:waypoint x="1062" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1bf6wml_di" bpmnElement="Flow_1bf6wml">
+        <di:waypoint x="1080" y="267" />
+        <di:waypoint x="1132" y="267" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1yq3rp9_di" bpmnElement="Flow_1yq3rp9">
+        <di:waypoint x="770" y="267" />
+        <di:waypoint x="820" y="267" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1upgnj0_di" bpmnElement="Flow_1upgnj0">
+        <di:waypoint x="610" y="267" />
+        <di:waypoint x="670" y="267" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0az1mzb_di" bpmnElement="Flow_0az1mzb">
+        <di:waypoint x="920" y="267" />
+        <di:waypoint x="980" y="267" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0nkhpfh_di" bpmnElement="Flow_0nkhpfh">
+        <di:waypoint x="560" y="209" />
+        <di:waypoint x="560" y="140" />
+        <di:waypoint x="592" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0zjp0s4_di" bpmnElement="Flow_0zjp0s4">
+        <di:waypoint x="720" y="209" />
+        <di:waypoint x="720" y="140" />
+        <di:waypoint x="752" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_14gosyu_di" bpmnElement="Flow_14gosyu">
+        <di:waypoint x="870" y="209" />
+        <di:waypoint x="870" y="140" />
+        <di:waypoint x="902" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_1oxseo3_di" bpmnElement="start_event_book_flight_payment">
+        <dc:Bounds x="432" y="249" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="417" y="292" width="86" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0pesxju_di" bpmnElement="Event_0pesxju">
+        <dc:Bounds x="1132" y="249" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1116" y="292" width="68" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1eela96_di" bpmnElement="Event_0gwnl5p">
+        <dc:Bounds x="592" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="572" y="165" width="77" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_18x5kmn_di" bpmnElement="task_cancel_flight_reservation">
+        <dc:Bounds x="560" y="360" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1bci409_di" bpmnElement="Event_06yfzje">
+        <dc:Bounds x="752" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="732" y="165" width="77" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1hwimgp_di" bpmnElement="task_cancel_hotel_reservation">
+        <dc:Bounds x="720" y="360" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0vwo8n8_di" bpmnElement="task_cancel_car_reservation">
+        <dc:Bounds x="870" y="360" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0410uzu_di" bpmnElement="task_make_flight_reservation">
+        <dc:Bounds x="510" y="227" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1xvi362_di" bpmnElement="task_make_hotel_reservation">
+        <dc:Bounds x="670" y="227" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1gcmf1e_di" bpmnElement="task_make_car_reservation">
+        <dc:Bounds x="820" y="227" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_119ou3u_di" bpmnElement="task_charge_credit_card">
+        <dc:Bounds x="980" y="227" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_18d2thf_di" bpmnElement="Event_0qkwdwj">
+        <dc:Bounds x="902" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="882" y="165" width="77" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0or6sjv_di" bpmnElement="Event_1i8o8nf">
+        <dc:Bounds x="1062" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1042" y="165" width="77" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_1ewsxxz_di" bpmnElement="Association_1ewsxxz">
+        <di:waypoint x="560" y="325" />
+        <di:waypoint x="560" y="343" />
+        <di:waypoint x="610" y="343" />
+        <di:waypoint x="610" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0u5yos3_di" bpmnElement="Association_0u5yos3">
+        <di:waypoint x="720" y="325" />
+        <di:waypoint x="720" y="343" />
+        <di:waypoint x="770" y="343" />
+        <di:waypoint x="770" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1q1qxka_di" bpmnElement="Association_1q1qxka">
+        <di:waypoint x="870" y="325" />
+        <di:waypoint x="870" y="343" />
+        <di:waypoint x="920" y="343" />
+        <di:waypoint x="920" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_146jqqf_di" bpmnElement="Event_02kzisy">
+        <dc:Bounds x="542" y="209" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1s25ryz_di" bpmnElement="Event_1bq63rb">
+        <dc:Bounds x="542" y="289" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1ctsr2e_di" bpmnElement="Event_1hmmfng">
+        <dc:Bounds x="702" y="289" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_02ny9sn_di" bpmnElement="Event_13fcsne">
+        <dc:Bounds x="702" y="209" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1vhz9wi_di" bpmnElement="Event_003r142">
+        <dc:Bounds x="852" y="289" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0xpmpbz_di" bpmnElement="Event_0xp6tub">
+        <dc:Bounds x="1012" y="209" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1ssuqmq_di" bpmnElement="Event_1rrtf74">
+        <dc:Bounds x="852" y="209" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1472tix_di" bpmnElement="Event_1p5a5b7">
+        <dc:Bounds x="1202" y="382" width="36" height="36" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
