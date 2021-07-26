@@ -8,6 +8,9 @@
   <artifactId>bpmn-cancel-event-basic-example</artifactId>
   <version>1.0.0-SNAPSHOT</version>
 
+  <name>Basic Event Example - Cancel Event</name>
+  <description>This is a Spring Boot Application containing an embedded Camunda Process Engine.</description>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
