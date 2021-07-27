@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1cto1a5" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.9.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+  <bpmn:process id="terminate-event-process" name="Terminate Event Process" isExecutable="true" camunda:versionTag="1.0.0">
+    <bpmn:startEvent id="start_event_terminate" name="Start Event">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${taskexecutionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_160xyh3</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_160xyh3" sourceRef="start_event_terminate" targetRef="Gateway_17wcqr3" />
+    <bpmn:parallelGateway id="Gateway_17wcqr3">
+      <bpmn:incoming>Flow_160xyh3</bpmn:incoming>
+      <bpmn:outgoing>Flow_1qzmng7</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1kcgt44</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:userTask id="task_wait" name="Wait">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${taskexecutionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1qzmng7</bpmn:incoming>
+      <bpmn:outgoing>Flow_0l3grtn</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_1qzmng7" sourceRef="Gateway_17wcqr3" targetRef="task_wait" />
+    <bpmn:endEvent id="end_event_terminate" name="End Event">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${taskexecutionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0l3grtn</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0l3grtn" sourceRef="task_wait" targetRef="end_event_terminate" />
+    <bpmn:endEvent id="terminate_event" name="Terminate">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${taskexecutionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0540gzm</bpmn:incoming>
+      <bpmn:terminateEventDefinition id="TerminateEventDefinition_09os9s0" />
+    </bpmn:endEvent>
+    <bpmn:intermediateCatchEvent id="event_timer_wait" name="Wait 10 Seconds">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${taskexecutionlistener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1kcgt44</bpmn:incoming>
+      <bpmn:outgoing>Flow_0540gzm</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_1y1uzq5">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT10S</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_1kcgt44" sourceRef="Gateway_17wcqr3" targetRef="event_timer_wait" />
+    <bpmn:sequenceFlow id="Flow_0540gzm" sourceRef="event_timer_wait" targetRef="terminate_event" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="terminate-event-process">
+      <bpmndi:BPMNEdge id="Flow_0l3grtn_di" bpmnElement="Flow_0l3grtn">
+        <di:waypoint x="480" y="117" />
+        <di:waypoint x="552" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1qzmng7_di" bpmnElement="Flow_1qzmng7">
+        <di:waypoint x="315" y="117" />
+        <di:waypoint x="380" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_160xyh3_di" bpmnElement="Flow_160xyh3">
+        <di:waypoint x="188" y="117" />
+        <di:waypoint x="265" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1kcgt44_di" bpmnElement="Flow_1kcgt44">
+        <di:waypoint x="290" y="142" />
+        <di:waypoint x="290" y="230" />
+        <di:waypoint x="412" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0540gzm_di" bpmnElement="Flow_0540gzm">
+        <di:waypoint x="448" y="230" />
+        <di:waypoint x="552" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Gateway_0pd7ea4_di" bpmnElement="Gateway_17wcqr3">
+        <dc:Bounds x="265" y="92" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ob2rym_di" bpmnElement="task_wait">
+        <dc:Bounds x="380" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0tmvvz0_di" bpmnElement="end_event_terminate">
+        <dc:Bounds x="552" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="545" y="142" width="51" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0xqdf67_di" bpmnElement="terminate_event">
+        <dc:Bounds x="552" y="212" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="546" y="255" width="49" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0nw1c0g_di" bpmnElement="event_timer_wait">
+        <dc:Bounds x="412" y="212" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="389" y="255" width="83" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="start_event_terminate">
+        <dc:Bounds x="152" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="143" y="142" width="55" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
